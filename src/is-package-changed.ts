@@ -3,7 +3,7 @@ import path from 'path';
 import { findPackage } from './find-package';
 import { getPackageHash } from './get-package-hash';
 
-const isPackageChanged = ({ hashFilename = '.packagehash' }) => {
+const isPackageChanged = ({ hashFilename = '.packagehash' } = {}) => {
     const packagePath = findPackage();
     if (!packagePath) {
         console.error('Cannot find package.json. Travelling up from current working directory.');
