@@ -13,19 +13,18 @@ const isPackageChanged = ({ hashFilename = '.packagehash' } = {}) => {
 
     const packageHashPath = path.join(path.dirname(packagePath), hashFilename);
     const recentDigest = getPackageHash(packagePath);
+    const previousDigest = fs.readFileSync(packageHashPath, 'utf-8');
 
     // if the hash file doesn't exist
     // or if it does and the hash is different
-    let hash: string | undefined = undefined;
-    if (
-        !fs.existsSync(packageHashPath) ||
-        fs.readFileSync(packageHashPath, 'utf-8') !== recentDigest
-    ) {
-        hash = recentDigest;
-    }
+    const isChanged = !fs.existsSync(packageHashPath) || previousDigest !== recentDigest;
+
     return {
-        hash,
-        writeHash: writeHash.bind(null, hash),
+        hash: isChanged && recentDigest,
+        isChanged,
+        newHash: recentDigest,
+        oldHash: previousDigest,
+        writeHash: writeHash.bind(null, recentDigest),
     };
 };
 

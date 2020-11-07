@@ -11,7 +11,7 @@ It contains mainly code extracted from [install-changed](https://github.com/nine
 
 You can find this package on `npm` and can install it with `npm install package-changed`
 
-## Usage
+## Example usage
 ```
 const {
   isPackageChanged
@@ -22,22 +22,36 @@ const hash = isPackageChanged();
 
 // or run with custom options
 const {
-  hash,
+  isChanged,
   writeHash,
 } = isPackageChanged({
   hashFilename: '.packagehash',
 });
 
-if (hash) {
+if (isChanged) {
   // dependencies in your package.json have changed since last run
   ...
-  // call writeHash to write the lastes package hash to your disk
+  // call writeHash to write the latest package hash to your disk
   writeHash();
 }
 ```
 
-### Options
+### Documentation
 
-**hashFilename** `'.packagehash'`
+```javascript
+isPackageChanged(options?: PackageChangedOptions): PackageChangedResult;
+```
+**PackageChangedOptions**
+| Property     | Type   | Description                                             | Required | Default          |
+| ------------ | ------ | ------------------------------------------------------- | -------- | ---------------- |
+| hashFilename | string | Filename where hash of dependencies will be written to. | false    | `'.packagehash'` |
 
-Filename where hash of dependencies will be written to.
+**PackageChangedResult**
+| Property  | Type                | Description                                                                       |
+| --------- | ------------------- | --------------------------------------------------------------------------------- |
+| isChanged | boolean             | Filename where hash of dependencies will be written to.                           |
+| oldHash   | string \| undefined | The hash used to compare newHash with. `undefined` if no previous hash was found. |
+| newHash   | string              | The hash for the current listed dependencies in `package.json`                    |
+| writeHash | function            | Function which needs to be called after the cache has been succesfully restored.  |
+
+
