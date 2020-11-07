@@ -12,12 +12,13 @@ const isPackageChanged = ({ hashFilename = '.packagehash' } = {}) => {
     }
 
     const packageHashPath = path.join(path.dirname(packagePath), hashFilename);
+    const packageHashPathExists = fs.existsSync(packageHashPath);
     const recentDigest = getPackageHash(packagePath);
     const previousDigest = fs.readFileSync(packageHashPath, 'utf-8');
 
     // if the hash file doesn't exist
     // or if it does and the hash is different
-    const isChanged = !fs.existsSync(packageHashPath) || previousDigest !== recentDigest;
+    const isChanged = !packageHashPathExists || previousDigest !== recentDigest;
 
     return {
         hash: isChanged && recentDigest,
