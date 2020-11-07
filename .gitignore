@@ -1,0 +1,11 @@
+node_modules/
+
+coverage/
+
+lib/
+
+esm/
+
+types/
+
+tsconfig.tsbuildinfo
