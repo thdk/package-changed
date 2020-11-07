@@ -5,6 +5,11 @@
   "main": "lib/index.js",
   "types": "types/index.d.ts",
   "typings": "types/index.d.ts",
+  "files": [
+    "lib",
+    "esm",
+    "types"
+  ],
   "scripts": {
     "build:cjs": "tsc --declarationdir types",
     "build:es": "tsc -m esNext --outDir esm --declaration false",
