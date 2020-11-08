@@ -10,13 +10,27 @@ interface PackageChangedResult {
     isChanged: boolean;
 }
 
-const isPackageChanged = ({
-    hashFilename = '.packagehash',
-    cwd = process.cwd(),
-}: {
+interface PackageChangedOptions {
     hashFilename?: string;
     cwd?: string;
-} = {}): PackageChangedResult => {
+}
+
+interface PackageChangedCallback {
+    (result: Omit<PackageChangedResult, 'writeHash'>): Promise<boolean>;
+}
+
+async function isPackageChanged(options?: PackageChangedOptions): Promise<PackageChangedResult>;
+
+async function isPackageChanged(
+    options?: PackageChangedOptions,
+    callback?: PackageChangedCallback,
+): Promise<PackageChangedResult | Omit<PackageChangedResult, 'writeHash'>>;
+
+async function isPackageChanged(
+    options: PackageChangedOptions = {},
+    callback?: PackageChangedCallback,
+): Promise<PackageChangedResult | Omit<PackageChangedResult, 'writeHash'>> {
+    const { hashFilename = '.packagehash', cwd = process.cwd() } = options;
     const packagePath = findPackage({ cwd });
     if (!packagePath) {
         throw new Error('Cannot find package.json. Travelling up from current working directory.');
@@ -34,12 +48,21 @@ const isPackageChanged = ({
     // or if it does and the hash is different
     const isChanged = !packageHashPathExists || previousDigest !== recentDigest;
 
-    return {
+    const result = {
         hash: recentDigest,
         isChanged,
         oldHash: previousDigest || undefined,
+    };
+
+    if (callback) {
+        const canWriteHash = await callback(result);
+        canWriteHash && writeHash(recentDigest);
+    }
+
+    return {
+        ...result,
         writeHash: writeHash.bind(null, recentDigest),
     };
-};
+}
 
 export default isPackageChanged;
