@@ -5,6 +5,9 @@
   "main": "lib/index.js",
   "types": "types/index.d.ts",
   "typings": "types/index.d.ts",
+  "bin": {
+    "package-changed": "bin/package-changed.js"
+  },
   "files": [
     "lib",
     "esm",
@@ -50,6 +53,7 @@
     "@typescript-eslint/eslint-plugin": "^4.6.1",
     "@typescript-eslint/parser": "^4.6.1",
     "babel-jest": "^26.6.3",
+    "commander": "^6.2.0",
     "eslint": "^7.12.1",
     "eslint-config-prettier": "^6.15.0",
     "eslint-plugin-prettier": "^3.1.4",
