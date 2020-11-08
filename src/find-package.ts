@@ -1,8 +1,12 @@
 import path from 'path';
 import fs from 'fs';
 
-export const findPackage = () => {
-    let current = process.cwd();
+export const findPackage = (
+    { cwd }: { cwd: string } = {
+        cwd: process.cwd(),
+    },
+): string | undefined => {
+    let current = cwd;
     let last = current;
     do {
         const search = path.join(current, 'package.json');

@@ -18,7 +18,9 @@ const {
 } = require('package-changed')
 
 // run with default options
-const hash = isPackageChanged();
+const {
+  isChanged,
+} = isPackageChanged();
 
 // or run with custom options
 const {
@@ -39,19 +41,23 @@ if (isChanged) {
 ### Documentation
 
 ```javascript
-isPackageChanged(options?: PackageChangedOptions): PackageChangedResult;
+isPackageChanged(
+  options?: PackageChangedOptions,
+): PackageChangedResult;
 ```
 **PackageChangedOptions**
 | Property     | Type   | Description                                             | Required | Default          |
 | ------------ | ------ | ------------------------------------------------------- | -------- | ---------------- |
 | hashFilename | string | Filename where hash of dependencies will be written to. | false    | `'.packagehash'` |
+| cwd          | string | Current working directory                               | false    | `process.cwd()`  |
+
 
 **PackageChangedResult**
 | Property  | Type                | Description                                                                       |
 | --------- | ------------------- | --------------------------------------------------------------------------------- |
 | isChanged | boolean             | Filename where hash of dependencies will be written to.                           |
 | oldHash   | string \| undefined | The hash used to compare newHash with. `undefined` if no previous hash was found. |
-| newHash   | string              | The hash for the current listed dependencies in `package.json`                    |
+| hash      | string              | The hash for the current listed dependencies in `package.json`                    |
 | writeHash | function            | Function which needs to be called after the cache has been succesfully restored.  |
 
 
