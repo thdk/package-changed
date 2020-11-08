@@ -26,7 +26,7 @@ const {
 const {
   isChanged,
   writeHash,
-} = isPackageChanged({
+} = await isPackageChanged({
   hashFilename: '.packagehash',
 });
 
@@ -36,6 +36,16 @@ if (isChanged) {
   // call writeHash to write the latest package hash to your disk
   writeHash();
 }
+
+// or use the callback argument
+isPackageChanged(
+  undefined, // using default options
+  ({isChanged}) => {
+    // ...
+
+    return true; // or false if you don't want the hash to be written
+  },
+);
 ```
 
 ### Documentation
@@ -43,13 +53,24 @@ if (isChanged) {
 ```javascript
 isPackageChanged(
   options?: PackageChangedOptions,
-): PackageChangedResult;
+  callback?: (result: PackageChangedCallbackResult) => Promise<boolean>,
+): Promise<PackageChangedResult>;
 ```
+
+
 **PackageChangedOptions**
 | Property     | Type   | Description                                             | Required | Default          |
 | ------------ | ------ | ------------------------------------------------------- | -------- | ---------------- |
 | cwd          | string | Current working directory                               | false    | `process.cwd()`  |
 | hashFilename | string | Filename where hash of dependencies will be written to. | false    | `'.packagehash'` |
+
+
+**PackageChangedCallbackResult**
+| Property  | Type                | Description                                                                       |
+| --------- | ------------------- | --------------------------------------------------------------------------------- |
+| isChanged | boolean             | Filename where hash of dependencies will be written to.                           |
+| hash      | string              | The hash for the current listed dependencies in `package.json`                    |
+| oldHash   | string \| undefined | The hash used to compare newHash with. `undefined` if no previous hash was found. |
 
 
 **PackageChangedResult**
@@ -59,5 +80,6 @@ isPackageChanged(
 | hash      | string              | The hash for the current listed dependencies in `package.json`                    |
 | oldHash   | string \| undefined | The hash used to compare newHash with. `undefined` if no previous hash was found. |
 | writeHash | function            | Function which needs to be called after the cache has been succesfully restored.  |
+
 
 
