@@ -46,7 +46,9 @@ program
                         cwd,
                     });
                 }
-                return true;
+
+                // Don't write hash file when --ci
+                return !cmdObj.ci;
             },
         );
     });
