@@ -10,13 +10,15 @@ program
     .option('--cwd [cwd]', 'Current working directory.')
     .option('--hash-filename [filename]', 'Filename where hash of dependencies will be written to')
     .action((command) => {
+        const cwd = program.cwd || process.cwd();
         const { isChanged } = isPackageChanged({
-            cwd: program.cwd || process.cwd(),
+            cwd,
         });
 
         if (isChanged && command) {
             execSync(command, {
                 stdio: 'inherit',
+                cwd,
             });
         }
     });
