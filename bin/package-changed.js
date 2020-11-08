@@ -30,7 +30,7 @@ program.command('run [command]', { isDefault: false }).action(async (command) =>
 
 program
     .command('install', { isDefault: true })
-    .option('--ci', "Run 'npm ci' instead of 'npm i' when package is changed.")
+    .option('--ci', "Run 'npm ci' instead of 'npm i'. Even when package is not changed.")
     .action(async (cmdObj) => {
         const cwd = program.cwd || process.cwd();
 
@@ -40,7 +40,7 @@ program
                 hashFilename: program.hashFilename,
             },
             ({ isChanged }) => {
-                if (isChanged) {
+                if (isChanged || cmdObj.ci) {
                     execSync(cmdObj.ci ? 'npm ci' : 'npm i', {
                         stdio: 'inherit',
                         cwd,
