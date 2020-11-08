@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 import fs from 'fs';
 
-export const getPackageHash = (packagePath: string) => {
+export const getPackageHash = (packagePath: string): string => {
     const hashSum = crypto.createHash('md5');
     const contents = fs.readFileSync(packagePath, 'utf-8');
     const packageBlob = JSON.parse(contents);
