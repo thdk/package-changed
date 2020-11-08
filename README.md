@@ -12,7 +12,7 @@ It contains mainly code extracted from [install-changed](https://github.com/nine
 You can find this package on `npm` and can install it with `npm install package-changed`
 
 ## Example usage
-```
+```javascript
 const {
   isPackageChanged
 } = require('package-changed')
@@ -48,16 +48,16 @@ isPackageChanged(
 **PackageChangedOptions**
 | Property     | Type   | Description                                             | Required | Default          |
 | ------------ | ------ | ------------------------------------------------------- | -------- | ---------------- |
-| hashFilename | string | Filename where hash of dependencies will be written to. | false    | `'.packagehash'` |
 | cwd          | string | Current working directory                               | false    | `process.cwd()`  |
+| hashFilename | string | Filename where hash of dependencies will be written to. | false    | `'.packagehash'` |
 
 
 **PackageChangedResult**
 | Property  | Type                | Description                                                                       |
 | --------- | ------------------- | --------------------------------------------------------------------------------- |
 | isChanged | boolean             | Filename where hash of dependencies will be written to.                           |
-| oldHash   | string \| undefined | The hash used to compare newHash with. `undefined` if no previous hash was found. |
 | hash      | string              | The hash for the current listed dependencies in `package.json`                    |
+| oldHash   | string \| undefined | The hash used to compare newHash with. `undefined` if no previous hash was found. |
 | writeHash | function            | Function which needs to be called after the cache has been succesfully restored.  |
 
 
