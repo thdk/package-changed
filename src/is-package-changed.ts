@@ -16,7 +16,7 @@ interface PackageChangedOptions {
 }
 
 interface PackageChangedCallback {
-    (result: Omit<PackageChangedResult, 'writeHash'>): Promise<boolean>;
+    (result: Omit<PackageChangedResult, 'writeHash'>): Promise<boolean | undefined>;
 }
 
 async function isPackageChanged(options?: PackageChangedOptions): Promise<PackageChangedResult>;
@@ -55,8 +55,13 @@ async function isPackageChanged(
     };
 
     if (callback) {
-        const canWriteHash = await callback(result);
-        canWriteHash && writeHash(recentDigest);
+        let canWriteHash = await callback(result);
+        if (canWriteHash === undefined) {
+            canWriteHash = process.env.CI !== 'true';
+        }
+        if (canWriteHash) {
+            writeHash(recentDigest);
+        }
     }
 
     return {

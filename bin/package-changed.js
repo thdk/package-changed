@@ -23,32 +23,31 @@ program.command('run [command]', { isDefault: false }).action(async (command) =>
                     cwd,
                 });
             }
-            return true;
         },
     );
 });
 
 program
     .command('install', { isDefault: true })
-    .option('--ci', "Run 'npm ci' instead of 'npm i'. Even when package is not changed.")
+    .option(
+        '--ci',
+        "Run 'npm ci' instead of 'npm i'. Even when package is not changed. Default when env.CI=true",
+    )
     .action(async (cmdObj) => {
         const cwd = program.cwd || process.cwd();
-
+        const { ci = process.env.CI === 'true' } = cmdObj;
         await isPackageChanged(
             {
                 cwd,
                 hashFilename: program.hashFilename,
             },
             ({ isChanged }) => {
-                if (isChanged || cmdObj.ci) {
-                    execSync(cmdObj.ci ? 'npm ci' : 'npm i', {
+                if (isChanged) {
+                    execSync(ci ? 'npm ci' : 'npm i', {
                         stdio: 'inherit',
                         cwd,
                     });
                 }
-
-                // Don't write hash file when --ci
-                return !cmdObj.ci;
             },
         );
     });
