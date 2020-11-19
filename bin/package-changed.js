@@ -43,6 +43,7 @@ program
             },
             ({ isChanged }) => {
                 if (isChanged) {
+                    console.log(`Package changed. Running 'npm ${ci ? 'ci' : 'install'}' ...`);
                     execSync(ci ? 'npm ci' : 'npm i', {
                         stdio: 'inherit',
                         cwd,
