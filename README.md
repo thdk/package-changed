@@ -4,14 +4,85 @@ This package is a quick and easy way of figuring out whether or not `package.jso
 
 It contains mainly code extracted from [install-changed](https://github.com/ninesalt/install-changed).
 
-`install-changed` will run `npm install` when dependencies have changed while `package-changed` provides only the javascript api to tell you whether or not the dependencies have changed. What you further want to do with it is entirely up to you.
-
+`install-changed` will run `npm install` when dependencies have changed. `package-changed` also provides this functionality. However, it does give you **more control** on what should happen when dependencies in your package.json file have changed.
 
 ## Install
 
-You can find this package on `npm` and can install it with `npm install package-changed`
+You can find this package on `npm` and can install it with:
 
-## Example usage
+`npm install package-changed`
+
+However, you can use it without having to install it using `npx`:
+
+`npx package-changed`
+
+## Documentation
+
+### CLI
+
+Use **package-changed** simply by running following from your project root:
+
+`npx package-changed`
+
+This is, in fact, a shorthand for the following commands:
+
+`npx package-changed run "npm install"`
+
+or if you have an **environmental variable** `CI` with value set to `true` then it will run:
+
+`npx package-changed run "npm ci"`
+
+However, using the `run` command you can specify any command which you want to run in case your dependencies have changed since the last run.
+
+```
+npx package-changed run "echo 'Run any command when your package has changed'"
+```
+
+#### All CLI options
+
+**package-changed**
+
+```
+Options:
+  --cwd [cwd]                 Current working directory.
+  --hash-filename [filename]  Filename where hash of dependencies will be written to
+  -h, --help                  display help for command
+
+Commands:
+  run [command]
+  install [options]
+  help [command]              display help for command
+```
+
+**package-changed install**
+
+```
+Usage: package-changed install [options]
+
+Options:
+  --ci        Run 'npm ci' instead of 'npm i'. Even when package is not changed. Default when env.CI=true 
+  -h, --help  display help for command
+```
+
+**package-changed run**
+
+```
+Usage: package-changed run [options] [command]
+
+Options:
+  -h, --help  display help for command
+```
+
+### Javascript API
+
+```javascript
+isPackageChanged(
+  options?: PackageChangedOptions,
+  callback?: (result: PackageChangedCallbackResult) => Promise<boolean>,
+): Promise<PackageChangedResult>;
+```
+
+#### Example usage
 ```javascript
 const {
   isPackageChanged
@@ -47,16 +118,6 @@ isPackageChanged(
   },
 );
 ```
-
-### Documentation
-
-```javascript
-isPackageChanged(
-  options?: PackageChangedOptions,
-  callback?: (result: PackageChangedCallbackResult) => Promise<boolean>,
-): Promise<PackageChangedResult>;
-```
-
 
 **PackageChangedOptions**
 | Property     | Type   | Description                                             | Required | Default          |
