@@ -33,9 +33,10 @@ program
         '--ci',
         "Run 'npm ci' instead of 'npm i'. Even when package is not changed. Default when env.CI=true",
     )
+    .option('-r, --registry <registry>', 'npm registry url to use')
     .action(async (cmdObj) => {
         const cwd = program.cwd || process.cwd();
-        const { ci = process.env.CI === 'true' } = cmdObj;
+        const { ci = process.env.CI === 'true', registry } = cmdObj;
         await isPackageChanged(
             {
                 cwd,
@@ -44,10 +45,13 @@ program
             ({ isChanged }) => {
                 if (isChanged) {
                     console.log(`Package changed. Running 'npm ${ci ? 'ci' : 'install'}' ...`);
-                    execSync(ci ? 'npm ci' : 'npm i', {
-                        stdio: 'inherit',
-                        cwd,
-                    });
+                    execSync(
+                        `npm ${ci ? 'ci' : 'i'}${registry ? ` --registry='${registry}'` : ''}`,
+                        {
+                            stdio: 'inherit',
+                            cwd,
+                        },
+                    );
                 }
             },
         );

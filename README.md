@@ -60,7 +60,8 @@ Commands:
 Usage: package-changed install [options]
 
 Options:
-  --ci        Run 'npm ci' instead of 'npm i'. Even when package is not changed. Default when env.CI=true 
+  --ci        Run 'npm ci' instead of 'npm i'. Even when package is not changed. Default when env.CI=true
+  -r, --registry <registry>  npm registry url to use
   -h, --help  display help for command
 ```
 
