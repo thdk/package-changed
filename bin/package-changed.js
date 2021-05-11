@@ -50,6 +50,7 @@ program
                         {
                             stdio: 'inherit',
                             cwd,
+                            env: process.env,
                         },
                     );
                 }
