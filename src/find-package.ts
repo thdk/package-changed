@@ -9,7 +9,7 @@ export const findPackage = (
     let current = cwd;
     let last = current;
     do {
-        const search = path.join(current, 'package.json');
+        const search = path.join(current, 'yarn.lock');
         if (fs.existsSync(search)) {
             return search;
         }
