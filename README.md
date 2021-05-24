@@ -1,46 +1,46 @@
-# package-changed
+# lockfile-changed
 
 This package is a quick and easy way of figuring out whether or not `package.json` has been modified.
 
 It contains mainly code extracted from [install-changed](https://github.com/ninesalt/install-changed).
 
-`install-changed` will run `npm install` when dependencies have changed. `package-changed` also provides this functionality. However, it does give you **more control** on what should happen when dependencies in your package.json file have changed.
+`install-changed` will run `npm install` when dependencies have changed. `lockfile-changed` also provides this functionality. However, it does give you **more control** on what should happen when dependencies in your package.json file have changed.
 
 ## Install
 
 You can find this package on `npm` and can install it with:
 
-`npm install package-changed`
+`npm install lockfile-changed`
 
 However, you can use it without having to install it using `npx`:
 
-`npx package-changed`
+`npx lockfile-changed`
 
 ## Documentation
 
 ### CLI
 
-Use **package-changed** simply by running following from your project root:
+Use **lockfile-changed** simply by running following from your project root:
 
-`npx package-changed`
+`npx lockfile-changed`
 
 This is, in fact, a shorthand for the following commands:
 
-`npx package-changed run "npm install"`
+`npx lockfile-changed run "npm install"`
 
 or if you have an **environmental variable** `CI` with value set to `true` then it will run:
 
-`npx package-changed run "npm ci"`
+`npx lockfile-changed run "npm ci"`
 
 However, using the `run` command you can specify any command which you want to run in case your dependencies have changed since the last run.
 
 ```
-npx package-changed run "echo 'Run any command when your package has changed'"
+npx lockfile-changed run "echo 'Run any command when your package has changed'"
 ```
 
 #### All CLI options
 
-**package-changed**
+**lockfile-changed**
 
 ```
 Options:
@@ -54,10 +54,10 @@ Commands:
   help [command]              display help for command
 ```
 
-**package-changed install**
+**lockfile-changed install**
 
 ```
-Usage: package-changed install [options]
+Usage: lockfile-changed install [options]
 
 Options:
   --ci        Run 'npm ci' instead of 'npm i'. Even when package is not changed. Default when env.CI=true
@@ -65,10 +65,10 @@ Options:
   -h, --help  display help for command
 ```
 
-**package-changed run**
+**lockfile-changed run**
 
 ```
-Usage: package-changed run [options] [command]
+Usage: lockfile-changed run [options] [command]
 
 Options:
   -h, --help  display help for command
@@ -84,10 +84,11 @@ isPackageChanged(
 ```
 
 #### Example usage
+
 ```javascript
 const {
   isPackageChanged
-} = require('package-changed')
+} = require('lockfile-changed')
 
 // run with default options
 const {

@@ -36,7 +36,10 @@ program
     .option('-r, --registry <registry>', 'npm registry url to use')
     .action(async (cmdObj) => {
         const cwd = program.cwd || process.cwd();
-        const { ci = process.env.CI === 'true', registry } = cmdObj;
+        const {
+            ci = process.env.CI === 'true',
+            // registry
+        } = cmdObj;
         await isPackageChanged(
             {
                 cwd,
@@ -44,9 +47,11 @@ program
             },
             ({ isChanged }) => {
                 if (isChanged) {
-                    console.log(`Package changed. Running 'npm ${ci ? 'ci' : 'install'}' ...`);
+                    console.log(
+                        `Package changed. Running 'yarn ${ci ? 'install' : 'install'}' ...`,
+                    );
                     execSync(
-                        `npm ${ci ? 'ci' : 'i'}${registry ? ` --registry='${registry}'` : ''}`,
+                        `yarn ${ci ? 'install' : 'install'}`, //${registry ? ` --registry='${registry}'` : ''}`,
                         {
                             stdio: 'inherit',
                             cwd,

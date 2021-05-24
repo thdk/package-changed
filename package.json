@@ -1,12 +1,12 @@
 {
-  "name": "package-changed",
+  "name": "lockfile-changed",
   "version": "1.7.0",
   "description": "Tells you whether or not dependencies in package.json have been changed.",
   "main": "lib/index.js",
   "types": "types/index.d.ts",
   "typings": "types/index.d.ts",
   "bin": {
-    "package-changed": "bin/package-changed.js"
+    "lockfile-changed": "bin/lockfile-changed.js"
   },
   "files": [
     "lib",
@@ -26,9 +26,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/thdk/package-changed.git"
+    "url": "https://github.com/devinrhode2/lockfile-changed.git"
   },
-  "author": "Thomas Dekiere <t.dekiere@gmail.com>(http://github.com/thdk)",
+  "author": "Devin Rhode <devinrhode2@gmail.com>(http://github.com/devinrhode2)",
   "license": "ISC",
   "keywords": [
     "npm",

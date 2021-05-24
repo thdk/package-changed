@@ -1,3 +1,3 @@
-import isPackageChanged from './is-package-changed';
+import isPackageChanged from './is-lockfile-changed';
 
 export { isPackageChanged };
