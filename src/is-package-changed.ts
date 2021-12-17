@@ -2,6 +2,8 @@ import fs from 'fs';
 import path from 'path';
 import { findPackage } from './find-package';
 import { getPackageHash } from './get-package-hash';
+import { getPackagelockHash } from './get-packagelock-hash';
+import { findPackagelock } from './find-packagelock';
 
 interface PackageChangedResult {
     hash: string;
@@ -13,6 +15,7 @@ interface PackageChangedResult {
 interface PackageChangedOptions {
     hashFilename?: string;
     cwd?: string;
+    lockfile?: boolean;
 }
 
 interface PackageChangedCallback {
@@ -30,18 +33,21 @@ async function isPackageChanged(
     options: PackageChangedOptions = {},
     callback?: PackageChangedCallback,
 ): Promise<PackageChangedResult | Omit<PackageChangedResult, 'writeHash'>> {
-    const { hashFilename = '.packagehash', cwd = process.cwd() } = options;
+    const { hashFilename = '.packagehash', cwd = process.cwd(), lockfile } = options;
     const packagePath = findPackage({ cwd });
     if (!packagePath) {
         throw new Error('Cannot find package.json. Travelling up from current working directory.');
     }
+    const packagelockPath = findPackagelock({ cwd });
 
     const packageHashPath = path.join(cwd, hashFilename);
     const writeHash = (hash: string | undefined) =>
         hash && fs.writeFileSync(packageHashPath, hash, {});
 
     const packageHashPathExists = fs.existsSync(packageHashPath);
-    const recentDigest = getPackageHash(packagePath);
+    const recentDigest = lockfile
+        ? `${getPackageHash(packagePath)}${getPackagelockHash(packagelockPath) ?? ''}`
+        : getPackageHash(packagePath);
     const previousDigest = packageHashPathExists && fs.readFileSync(packageHashPath, 'utf-8');
 
     // if the hash file doesn't exist
@@ -60,13 +66,17 @@ async function isPackageChanged(
             canWriteHash = process.env.CI !== 'true';
         }
         if (canWriteHash) {
-            writeHash(recentDigest);
+            if (lockfile)
+                result.hash = `${getPackageHash(packagePath)}${
+                    getPackagelockHash(packagelockPath) ?? ''
+                }`; // hash may have changed since package-lock.file could have been updated after command
+            writeHash(result.hash);
         }
     }
 
     return {
         ...result,
-        writeHash: writeHash.bind(null, recentDigest),
+        writeHash: writeHash.bind(null, result.hash),
     };
 }
 

@@ -4,6 +4,8 @@ This package is a quick and easy way of figuring out whether or not `package.jso
 
 It contains mainly code extracted from [install-changed](https://github.com/ninesalt/install-changed).
 
+There is also an option to include `package-lock.json` changes.
+
 `install-changed` will run `npm install` when dependencies have changed. `package-changed` also provides this functionality. However, it does give you **more control** on what should happen when dependencies in your package.json file have changed.
 
 ## Install
@@ -121,10 +123,11 @@ isPackageChanged(
 ```
 
 **PackageChangedOptions**
-| Property     | Type   | Description                                             | Required | Default          |
-| ------------ | ------ | ------------------------------------------------------- | -------- | ---------------- |
-| cwd          | string | Current working directory                               | false    | `process.cwd()`  |
-| hashFilename | string | Filename where hash of dependencies will be written to. | false    | `'.packagehash'` |
+| Property     | Type    | Description                                                             | Required | Default          |
+| ------------ | ------- | ----------------------------------------------------------------------- | -------- | ---------------- |
+| cwd          | string  | Current working directory                                               | false    | `process.cwd()`  |
+| hashFilename | string  | Filename where hash of dependencies will be written to.                 | false    | `'.packagehash'` |
+| lockfile     | boolean | Create hash from lockfile content instead of package.json dependencies. | false    | `false`          |
 
 
 **PackageChangedCallbackResult**
