@@ -61,15 +61,18 @@ async function isPackageChanged(
     };
 
     if (callback) {
+        if (lockfile) {
+            // hash may have changed since package-lock.file could have been updated after command
+            result.hash = `${getPackageHash(packagePath)}${
+                getPackagelockHash(packagelockPath) ?? ''
+            }`;
+        }
+
         let canWriteHash = await callback(result);
         if (canWriteHash === undefined) {
             canWriteHash = process.env.CI !== 'true';
         }
         if (canWriteHash) {
-            if (lockfile)
-                result.hash = `${getPackageHash(packagePath)}${
-                    getPackagelockHash(packagelockPath) ?? ''
-                }`; // hash may have changed since package-lock.file could have been updated after command
             writeHash(result.hash);
         }
     }
