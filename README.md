@@ -123,11 +123,12 @@ isPackageChanged(
 ```
 
 **PackageChangedOptions**
-| Property     | Type    | Description                                             | Required | Default          |
-| ------------ | ------- | ------------------------------------------------------- | -------- | ---------------- |
-| cwd          | string  | Current working directory                               | false    | `process.cwd()`  |
-| hashFilename | string  | Filename where hash of dependencies will be written to. | false    | `'.packagehash'` |
-| lockfile     | boolean | Include package-lock.json content in hash.              | false    | `false`          |
+| Property      | Type    | Description                                             | Required | Default          |
+| ------------- | ------- | ------------------------------------------------------- | -------- | ---------------- |
+| cwd           | string  | Current working directory                               | false    | `process.cwd()`  |
+| hashFilename  | string  | Filename where hash of dependencies will be written to. | false    | `'.packagehash'` |
+| lockfile      | boolean | Include package-lock.json content in hash.              | false    | `false`          |
+| skipWriteHash | boolean | Skip writing new hash to .packagehash file.              | false    | `false`          |
 
 
 **PackageChangedCallbackResult**
