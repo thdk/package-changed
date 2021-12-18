@@ -8,8 +8,7 @@ const { isPackageChanged } = require('../lib/index');
 program
     .option('--cwd [cwd]', 'Current working directory.')
     .option('--hash-filename [filename]', 'Filename where hash of dependencies will be written to')
-    .option('--lockfile', 'Include package-lock.json content in hash')
-    .option('--skip-write-hash', 'Skip writing new hash to .packagehash file');
+    .option('--lockfile', 'Include package-lock.json content in hash');
 
 program.command('run [command]', { isDefault: false }).action(async (command) => {
     const cwd = program.cwd || process.cwd();
@@ -18,7 +17,6 @@ program.command('run [command]', { isDefault: false }).action(async (command) =>
             cwd,
             hashFilename: program.hashFilename,
             lockfile: program.lockfile,
-            skipWriteHash: program.skipWriteHash,
         },
         ({ isChanged }) => {
             if (isChanged && command) {
@@ -46,7 +44,6 @@ program
                 cwd,
                 hashFilename: program.hashFilename,
                 lockfile: program.lockfile,
-                skipWriteHash: program.skipWriteHash,
             },
             ({ isChanged }) => {
                 if (isChanged) {

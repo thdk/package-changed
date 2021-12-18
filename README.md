@@ -47,7 +47,6 @@ Options:
   --cwd [cwd]                 Current working directory.
   --hash-filename [filename]  Filename where hash of dependencies will be written to
   --lockfile                  Include package-lock.json content in hash
-  --skip-write-hash           Skip writing new hash to .packagehash file
   -h, --help                  display help for command
 
 Commands:
@@ -128,7 +127,6 @@ isPackageChanged(
 | cwd           | string  | Current working directory                               | false    | `process.cwd()`  |
 | hashFilename  | string  | Filename where hash of dependencies will be written to. | false    | `'.packagehash'` |
 | lockfile      | boolean | Include package-lock.json content in hash.              | false    | `false`          |
-| skipWriteHash | boolean | Skip writing new hash to .packagehash file.              | false    | `false`          |
 
 
 **PackageChangedCallbackResult**
