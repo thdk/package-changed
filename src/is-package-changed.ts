@@ -3,7 +3,7 @@ import path from 'path';
 import { findPackage } from './find-package';
 import { getPackageHash } from './get-package-hash';
 import { getPackagelockHash } from './get-packagelock-hash';
-import { findPackagelock } from './find-packagelock';
+import { getPackagelock } from './get-packagelock';
 
 interface PackageChangedResult {
     hash: string;
@@ -39,7 +39,10 @@ async function isPackageChanged(
     if (!packagePath) {
         throw new Error('Cannot find package.json. Travelling up from current working directory.');
     }
-    const packagelockPath = findPackagelock({ cwd });
+    let packagelockPath;
+    if (lockfile) {
+        packagelockPath = getPackagelock({ packagePath });
+    }
 
     const packageHashPath = path.join(cwd, hashFilename);
     const writeHash = (hash: string | undefined) =>
@@ -62,14 +65,13 @@ async function isPackageChanged(
     };
 
     if (callback) {
+        let canWriteHash = await callback(result);
         if (lockfile) {
             // hash may have changed since package-lock.file could have been updated after command
             result.hash = `${getPackageHash(packagePath)}${
                 getPackagelockHash(packagelockPath) ?? ''
             }`;
         }
-
-        let canWriteHash = await callback(result);
         if (canWriteHash === undefined) {
             canWriteHash = process.env.CI !== 'true';
         }

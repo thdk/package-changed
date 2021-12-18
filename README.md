@@ -4,8 +4,6 @@ This package is a quick and easy way of figuring out whether or not `package.jso
 
 It contains mainly code extracted from [install-changed](https://github.com/ninesalt/install-changed).
 
-There is also an option to include `package-lock.json` changes.
-
 `install-changed` will run `npm install` when dependencies have changed. `package-changed` also provides this functionality. However, it does give you **more control** on what should happen when dependencies in your package.json file have changed.
 
 ## Install
