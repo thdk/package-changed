@@ -46,6 +46,7 @@ npx package-changed run "echo 'Run any command when your package has changed'"
 Options:
   --cwd [cwd]                 Current working directory.
   --hash-filename [filename]  Filename where hash of dependencies will be written to
+  --lockfile                  Include package-lock.json content in hash
   -h, --help                  display help for command
 
 Commands:
