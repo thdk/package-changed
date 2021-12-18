@@ -2,6 +2,8 @@ import fs from 'fs';
 import path from 'path';
 import { findPackage } from './find-package';
 import { getPackageHash } from './get-package-hash';
+import { getPackagelockHash } from './get-packagelock-hash';
+import { getPackagelock } from './get-packagelock';
 
 interface PackageChangedResult {
     hash: string;
@@ -13,6 +15,7 @@ interface PackageChangedResult {
 interface PackageChangedOptions {
     hashFilename?: string;
     cwd?: string;
+    lockfile?: boolean;
 }
 
 interface PackageChangedCallback {
@@ -30,10 +33,14 @@ async function isPackageChanged(
     options: PackageChangedOptions = {},
     callback?: PackageChangedCallback,
 ): Promise<PackageChangedResult | Omit<PackageChangedResult, 'writeHash'>> {
-    const { hashFilename = '.packagehash', cwd = process.cwd() } = options;
+    const { hashFilename = '.packagehash', cwd = process.cwd(), lockfile } = options;
     const packagePath = findPackage({ cwd });
     if (!packagePath) {
         throw new Error('Cannot find package.json. Travelling up from current working directory.');
+    }
+    let packagelockPath;
+    if (lockfile) {
+        packagelockPath = getPackagelock({ packagePath });
     }
 
     const packageHashPath = path.join(cwd, hashFilename);
@@ -41,7 +48,9 @@ async function isPackageChanged(
         hash && fs.writeFileSync(packageHashPath, hash, {});
 
     const packageHashPathExists = fs.existsSync(packageHashPath);
-    const recentDigest = getPackageHash(packagePath);
+    const recentDigest = lockfile
+        ? `${getPackageHash(packagePath)}${getPackagelockHash(packagelockPath) ?? ''}`
+        : getPackageHash(packagePath);
     const previousDigest = packageHashPathExists && fs.readFileSync(packageHashPath, 'utf-8');
 
     // if the hash file doesn't exist
@@ -56,17 +65,23 @@ async function isPackageChanged(
 
     if (callback) {
         let canWriteHash = await callback(result);
+        if (lockfile) {
+            // hash may have changed since package-lock.file could have been updated after command
+            result.hash = `${getPackageHash(packagePath)}${
+                getPackagelockHash(packagelockPath) ?? ''
+            }`;
+        }
         if (canWriteHash === undefined) {
             canWriteHash = process.env.CI !== 'true';
         }
         if (canWriteHash) {
-            writeHash(recentDigest);
+            writeHash(result.hash);
         }
     }
 
     return {
         ...result,
-        writeHash: writeHash.bind(null, recentDigest),
+        writeHash: writeHash.bind(null, result.hash),
     };
 }
 
