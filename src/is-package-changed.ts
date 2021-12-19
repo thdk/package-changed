@@ -16,6 +16,7 @@ interface PackageChangedOptions {
     hashFilename?: string;
     cwd?: string;
     lockfile?: boolean;
+    noHashFile?: boolean;
 }
 
 interface PackageChangedCallback {
@@ -33,7 +34,7 @@ async function isPackageChanged(
     options: PackageChangedOptions = {},
     callback?: PackageChangedCallback,
 ): Promise<PackageChangedResult | Omit<PackageChangedResult, 'writeHash'>> {
-    const { hashFilename = '.packagehash', cwd = process.cwd(), lockfile } = options;
+    const { hashFilename = '.packagehash', cwd = process.cwd(), lockfile, noHashFile } = options;
     const packagePath = findPackage({ cwd });
     if (!packagePath) {
         throw new Error('Cannot find package.json. Travelling up from current working directory.');
@@ -74,7 +75,7 @@ async function isPackageChanged(
         if (canWriteHash === undefined) {
             canWriteHash = process.env.CI !== 'true';
         }
-        if (canWriteHash) {
+        if (canWriteHash && !noHashFile) {
             writeHash(result.hash);
         }
     }
