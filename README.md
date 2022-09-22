@@ -89,7 +89,6 @@ npx husky add .husky/post-merge "npx --no package-changed"
 npx husky add .husky/post-rebase "npx --no package-changed"
 ```
 
-When using this approach, add `.packagehash` to your `.gitignore` so that changes can be properly detected when switching branches.
 
 ### Javascript API
 
