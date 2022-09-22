@@ -76,6 +76,20 @@ Options:
   -h, --help  display help for command
 ```
 
+#### Use git hooks to run **package-changed** automatically
+
+
+**package-changed** can be run automatically with git hooks, for example: when switching branches. [Husky](https://github.com/typicode/husky) is a popular choice for configuring git hooks.
+
+With Husky installed:
+
+```shell
+npx husky add .husky/post-checkout "npx --no package-changed"
+npx husky add .husky/post-merge "npx --no package-changed"
+npx husky add .husky/post-rebase "npx --no package-changed"
+```
+
+
 ### Javascript API
 
 ```javascript
