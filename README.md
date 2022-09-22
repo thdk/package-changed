@@ -76,7 +76,8 @@ Options:
   -h, --help  display help for command
 ```
 
-### git hooks
+#### Use git hooks to run **package-changed** automatically
+
 
 **package-changed** can be run automatically with git hooks, for example: when switching branches. [Husky](https://github.com/typicode/husky) is a popular choice for configuring git hooks.
 
