@@ -18,7 +18,7 @@ program.command('run [command]', { isDefault: false }).action(async (command) =>
             cwd,
             hashFilename: program.hashFilename,
             lockfile: program.lockfile,
-            noHashFile: program.noHashFile,
+            noHashFile: !program.hashFile,
         },
         ({ isChanged }) => {
             if (isChanged && command) {
@@ -46,7 +46,7 @@ program
                 cwd,
                 hashFilename: program.hashFilename,
                 lockfile: program.lockfile,
-                noHashFile: program.noHashFile,
+                noHashFile: !program.hashFile,
             },
             ({ isChanged }) => {
                 if (isChanged) {
