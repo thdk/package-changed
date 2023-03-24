@@ -8,7 +8,7 @@ const { isPackageChanged } = require('../lib/index');
 program
     .option('--cwd [cwd]', 'Current working directory.')
     .option('--hash-filename [filename]', 'Filename where hash of dependencies will be written to')
-    .option('--lockfile', 'Include package-lock.json content in hash')
+    .option('--lockfile', 'Include package versions from package-lock.json in hash')
     .option('--no-hash-file', 'Skip writing new hash to .packagehash file');
 
 program.command('run [command]', { isDefault: false }).action(async (command) => {
