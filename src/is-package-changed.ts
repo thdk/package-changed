@@ -8,7 +8,7 @@ import { getPackagelock } from './get-packagelock';
 interface PackageChangedResult {
     hash: string;
     oldHash: string | undefined;
-    writeHash(): void;
+    writeHash(hash?: string): void;
     isChanged: boolean;
 }
 
@@ -45,8 +45,6 @@ async function isPackageChanged(
     }
 
     const packageHashPath = path.join(cwd, hashFilename);
-    const writeHash = (hash: string | undefined) =>
-        hash && fs.writeFileSync(packageHashPath, hash, {});
 
     const packageHashPathExists = fs.existsSync(packageHashPath);
     const recentDigest = lockfile
@@ -63,6 +61,9 @@ async function isPackageChanged(
         isChanged,
         oldHash: previousDigest || undefined,
     };
+
+    const writeHash = (hash: string | undefined = result.hash) =>
+        hash && fs.writeFileSync(packageHashPath, hash, {});
 
     if (callback) {
         let canWriteHash = await callback(result);
@@ -82,7 +83,7 @@ async function isPackageChanged(
 
     return {
         ...result,
-        writeHash: writeHash.bind(null, result.hash),
+        writeHash,
     };
 }
 
